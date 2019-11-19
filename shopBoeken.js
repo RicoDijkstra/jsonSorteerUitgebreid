@@ -107,7 +107,7 @@ let sorteerBoekObj = {
       // titel maken
       let titel = document.createElement('h3');
       titel.className = 'boek__titel';
-      titel.textContent = boek.titel;
+      titel.text = boek.titel;
 
       //de element toevoegen
       sectie.appendChild(afbeelding);
