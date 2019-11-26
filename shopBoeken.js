@@ -4,8 +4,13 @@ let xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function(){
   if(this.readyState==4 && this.status == 200){
     sorteerBoekObj.data = JSON.parse(this.responseText);
-    // sorteerBoekObj.voegJSdatumIn();
-    sorteerBoekObj.sorteren();
+     // sorteerBoekObj.voegJSdatumIn();
+
+     sorteerBoekObj.data.forEach( boek => {
+       boek.titelUpper = boek.titel.toUpperCase();
+     });
+
+     sorteerBoekObj.sorteren();
   }
 }
 xmlhttp.open('GET', "boeken.json", true);
@@ -66,6 +71,14 @@ const maakOpsomming = (array) => {
   return string;
 }
 
+// maak een functie die de tekst achter de komma vooraan plaatst
+const keerTekstOm = (string) => {
+  if( string.indexOf(',') != -1 ) {
+    let array = string.split(',');
+    string = array[1] + ' ' + array[0];
+  }
+  return string;
+}
 // object dat de boeken uitvoert en sorteert
 // eigenschappen : data sorteerkenmerk
 // methods: sorteren() en uitvoeren( )
@@ -73,7 +86,7 @@ const maakOpsomming = (array) => {
 let sorteerBoekObj = {
   data: "",   // komt van de xmlhttp.onreadystatechange
 
-  kenmerk: "titel",
+  kenmerk: "titelUpper",
 
   //sorteer volgorde ne factor
   oplopend: 1,
@@ -94,24 +107,41 @@ let sorteerBoekObj = {
 
   //de data in een tabel uitvoeren
   uitvoeren: function(data){
+    // eerst de uitvoer leegmaken
+    document.getElementById('uitvoer').innerHTML = "";
     data.forEach( boek => {
       let sectie = document.createElement('section');
-      sectie.className = 'boek';
+      sectie.className = 'boekSelectie';
+      // main element met alle info behalve de prijs en afbeelding
+      let main = document.createElement('main');
+      main.className = 'boekSelectie__main';
 
       // cover maken(afbeelding)
       let afbeelding = document.createElement('img');
       afbeelding.className = 'boekSelectie__cover';
       afbeelding.setAttribute('src', boek.cover);
-      afbeelding.setAttribute('alt', boek.title);
+      afbeelding.setAttribute('alt', keerTekstOm(boek.titel));
 
       // titel maken
       let titel = document.createElement('h3');
-      titel.className = 'boek__titel';
-      titel.text = boek.titel;
+      titel.className = 'boekSelectie__titel';
+      titel.textContent = keerTekstOm(boek.titel);
+
+      // auters toevoegen
+      let auteurs = document.ceateElement('p');
+      auteurs.className = 'boekSelectie__auteurs';
+      
+
+      // prijs toevoegen
+      let prijs = document.createElement('div');
+      prijs.className = 'boekSelectie__prijs';
+      prijs.textContent = '€ ' + boek.prijs;
 
       //de element toevoegen
       sectie.appendChild(afbeelding);
-      sectie.appendChilt(titel);
+      main.appendChild(titel);
+      sectie.appendChild(main);
+      sectie.appendChild(prijs);
       document.getElementById('uitvoer').appendChild(sectie);
     });
   }
