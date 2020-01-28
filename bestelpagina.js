@@ -132,18 +132,30 @@ let winkelwagen = {
     this.items.push(el);
     localStorage.setItem('besteldeBoeken', JSON.stringify(this.items));
     this.uitvoeren();
-  },
 
+  },
   uitvoeren: function(){
     if (this.items.length > 0) {
       document.querySelector('.winkelwagen_aantal').innerHTML = this.items.length;
     }else{
       document.querySelector('.winkelwagen_aantal').innerHTML = '';
     }
+  },
+  totaalPrijsBerekenen: function(){
+    let totaal = 0;
+    this.items.forEach( boek=>{
+      totaal += boek.prijs;
+    });
+    return totaal;
   }
 
-}
 
+
+
+
+
+
+}
 winkelwagen.haalItemsOp();
 
 let sorteerBoekObj = {
@@ -167,6 +179,14 @@ let sorteerBoekObj = {
     this.data.sort((a, b) => a[this.kenmerk] > b[this.kenmerk] ? 1 * this.oplopend : -1 * this.oplopend);
     this.uitvoeren(this.data);
   },
+
+    totaalPrijsBerekenen: function(){
+      let totaal = 0;
+      this.items.forEach( boek => {
+        totaal += boek.prijs;
+      });
+      return totaal;
+    },
 
   //de data in een tabel uitvoeren
   uitvoeren: function(data) {
@@ -200,7 +220,7 @@ let sorteerBoekObj = {
       knop.innerHTML = 'voeg toe aan<br>winkelwagen';
       knop.addEventListener('click', () => {
         winkelwagen.toevoegen(boek);
-      })
+      });
 
 
       //de element toevoegen
@@ -211,17 +231,22 @@ let sorteerBoekObj = {
       prijs.appendChild(knop);
       document.getElementById('uitvoer').appendChild(sectie);
     });
+    let totaalTekst = document.createElement('div');
+    totaalTekst.className = 'besteldeBoeken__totaal-prijs';
+    totaalTekst.innerHTML = 'Totaal: ';
+
+    let totaalPrijs = document.createElement('div');
+    totaalPrijs.textContent = this.totaalPrijsBerekenen().toLocalString('nl-NL', {currency: 'EUR', style: 'currency'});
+
+    sectie.appendChild(totaalTekst);
+    sectie.appendChild(totaalPrijs);
+    document.getElementById('bestelling').appendChild(sectie);
+
+    let sectie = document.createElement('section');
+    sectie.className = 'boekSelectie';
+
   }
 }
-// keuze voor sorteer opties
-document.getElementById('kenmerk').addEventListener('change', (e) => {
-  sorteerBoekObj.kenmerk = e.target.value;
-  sorteerBoekObj.sorteren();
-});
 
-document.getElementsByName('oplopend').forEach((item) => {
-  item.addEventListener('click', (e) => {
-    sorteerBoekObj.oplopend = parseInt(e.target.value);
-    sorteerBoekObj.sorteren();
-  })
-})
+// winkelwagen.haalItemsOp();
+// winkelwagen.utvoeren();

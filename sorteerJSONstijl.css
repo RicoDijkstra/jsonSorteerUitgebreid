@@ -1,6 +1,29 @@
 .boekSelectie__cover{
   max-width: 100px;
 }
+
+.winkelwagen{
+  width: 3em;
+  height: 3em;
+  background-image: url('afb/winkelwagen.png');
+  background-size: contain;
+  float: right;
+  margin-right: 3em;
+  position: relative;
+  cursor: pointer;
+  position: sticky;
+}
+.winkelwagen_aantal:not(:empty){
+  background-color: #f00;
+  display: inline-block;
+  color: #fff;
+  position: absolute;
+  top: -.5em;
+  right: -.9em;
+  line-height: .5em;
+  padding: .5em;
+  border-radius: 50%;
+}
 .boekSelectie__rij--accent {
   background-color: #def;
 }
@@ -21,4 +44,28 @@
 
 .boekSelectie__prijs{
   font-size: 2em;
+}
+.boekSelectie__knop{
+  display: block;
+  margin: 1.5em auto;
+  background-color: #d00;
+  cursor: pointer;
+  color: #fff;
+  padding: .5em 1em 1em;
+  border-radius: 1em;
+}
+.boekSelectie__knop:hover{
+  background-color: #900;
+}
+.besteldBoek__verwijder{
+  width: 2em;
+  height: 2em;
+  background-color: black;
+  background-size: cover;
+  cursor: pointer;
+  border-radius: .3em;
+  transition: background-color 1s ease-out;
+}
+.besteldBoek__verwijder:hover{
+  background-color: grey;
 }
